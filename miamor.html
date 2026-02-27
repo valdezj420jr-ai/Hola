@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Para la mujer más increíble</title>
+<style>
+body{
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(-45deg, #ff4e50, #fc913a, #f9d423, #ff4e50);
+    background-size: 400% 400%;
+    animation: gradient 8s ease infinite;
+    text-align:center;
+    color:white;
+}
+
+@keyframes gradient {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.container{
+    position:relative;
+    top:50%;
+    transform:translateY(-50%);
+    padding:20px;
+}
+
+h1{
+    font-size:28px;
+}
+
+p{
+    font-size:18px;
+    line-height:1.5;
+}
+
+button{
+    padding:15px 25px;
+    border:none;
+    border-radius:30px;
+    background:white;
+    color:#ff4e50;
+    font-weight:bold;
+    font-size:16px;
+    cursor:pointer;
+    margin-top:20px;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.1);
+}
+
+.hidden{
+    display:none;
+    margin-top:20px;
+    font-size:20px;
+    animation:fadeIn 2s forwards;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+
+.heart{
+    position:absolute;
+    color:white;
+    font-size:20px;
+    animation: float 6s linear infinite;
+}
+
+@keyframes float{
+    from{transform:translateY(100vh);}
+    to{transform:translateY(-10vh);}
+}
+
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    pointer-events:none;
+}
+</style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+
+<div class="container">
+    <h1>Si estás leyendo esto… 💖</h1>
+    <p>
+        No fue casualidad encontrarte.  
+        Desde que llegaste, mis días tienen más luz,  
+        mis problemas pesan menos,  
+        y mi corazón tiene un hogar.
+    </p>
+
+    <p>
+        Gracias por existir, por tu sonrisa,  
+        por tus abrazos que curan todo,  
+        y por hacerme sentir que contigo quiero todo.
+    </p>
+
+    <button onclick="mostrar()">Toca aquí si quieres saber lo que siento de verdad</button>
+
+    <div id="mensaje" class="hidden">
+        🎉✨ Mi plan no es algo pasajero…  
+        Es construir contigo, apoyarte,  
+        crecer juntos y algún día mirar atrás  
+        y decir: lo logramos.  
+
+        Te amo más de lo que imaginas. 💍❤️
+    </div>
+</div>
+
+<script>
+// Corazones flotando
+function crearCorazon(){
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "💖";
+    heart.style.left = Math.random()*100 + "vw";
+    heart.style.fontSize = (Math.random()*20+10) + "px";
+    document.body.appendChild(heart);
+    setTimeout(()=>{heart.remove();},6000);
+}
+setInterval(crearCorazon,500);
+
+// Mostrar mensaje + confeti
+function mostrar(){
+    document.getElementById("mensaje").style.display="block";
+    lanzarConfeti();
+}
+
+// Confeti simple
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let pieces = [];
+
+function lanzarConfeti(){
+    for(let i=0;i<150;i++){
+        pieces.push({
+            x:Math.random()*canvas.width,
+            y:Math.random()*canvas.height- canvas.height,
+            r:Math.random()*6+4,
+            d:Math.random()*50,
+            color:`hsl(${Math.random()*360},100%,50%)`
+        });
+    }
+}
+
+function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(let i=0;i<pieces.length;i++){
+        let p = pieces[i];
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2,false);
+        ctx.fillStyle=p.color;
+        ctx.fill();
+        p.y+=2;
+        if(p.y>canvas.height){
+            p.y=0;
+        }
+    }
+    requestAnimationFrame(draw);
+}
+draw();
+</script>
+
+</body>
+</html>
